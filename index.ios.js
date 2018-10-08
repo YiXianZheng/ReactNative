@@ -11,16 +11,10 @@ import {
   Text,
   View,
   Image,
-  FlatList
+  FlatList,
 } from 'react-native';
+import TabNavigator from 'react-native-tab-navigator';
 
-var MOCKED_MOVIES_DATA = [
-  {
-    title: "标题",
-    year: "2015",
-    posters: { thumbnail: "http://i.imgur.com/UePbdph.jpg" }
-  }
-];
 var REQUEST_URL =
   "https://raw.githubusercontent.com/facebook/react-native/0.51-stable/docs/MoviesExample.json";
 
@@ -30,12 +24,13 @@ export default class SampleAppMovies extends Component {
     super(props);
     this.state = {
       data: [],
-      loaded: false
+      loaded: false,
+      selectedTab: 'home'
     };
-    this.fetchData = this.fetchData.bind(this);
+    // this.fetchData = this.fetchData.bind(this);
   }
   componentDidMount() {
-    this.fetchData();
+    // this.fetchData();
   }
   fetchData() {
     fetch(REQUEST_URL)
@@ -49,16 +44,46 @@ export default class SampleAppMovies extends Component {
       });
   }
   render() {
-    if(!this.state.loaded) {
-      return this.renderLoadingView();
-    }
     return (
-      <FlatList 
-        data={this.state.data}
-        renderItem={this.renderMovie}
-        style={styles.list}
-      />
-    );
+      <TabNavigator>  
+        <TabNavigator.Item  
+          selected={this.state.selectedTab === 'home'}  
+          title="Home"  
+          renderIcon={() => <Image style={styles.icon} source={require("./res/images/ic_polular.png")} />}  
+          renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: 'red'}]} source={require("./res/images/ic_polular.png")} />}  
+          badgeText='1'
+          onPress={() => this.setState({ selectedTab: 'home' })}>  
+            <View style={styles.page1}></View>
+        </TabNavigator.Item>  
+        <TabNavigator.Item  
+          selected={this.state.selectedTab === 'profile'}  
+          title="Profile"  
+          renderIcon={() => <Image style={styles.icon} source={require("./res/images/ic_trending.png")} />}  
+          renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: 'red'}]} source={require("./res/images/ic_trending.png")} />}  
+          // badgeText='1'
+          onPress={() => this.setState({ selectedTab: 'profile' })}>  
+            <View style={styles.page2}></View>
+        </TabNavigator.Item>  
+        <TabNavigator.Item  
+          selected={this.state.selectedTab === 'computer'}  
+          title="Computer"  
+          renderIcon={() => <Image style={styles.icon} source={require("./res/images/ic_computer.png")} />}  
+          renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: 'red'}]} source={require("./res/images/ic_computer.png")} />}  
+          // badgeText='1'
+          onPress={() => this.setState({ selectedTab: 'computer' })}>  
+            <View style={styles.page3}></View>
+        </TabNavigator.Item>  
+        <TabNavigator.Item  
+          selected={this.state.selectedTab === 'my'}  
+          title="My"  
+          renderIcon={() => <Image style={styles.icon} source={require("./res/images/ic_my.png")} />}  
+          renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: 'red'}]} source={require("./res/images/ic_my.png")} />}  
+          // badgeText='1'
+          onPress={() => this.setState({ selectedTab: 'my' })}>  
+            <View style={styles.page4}></View>
+        </TabNavigator.Item> 
+      </TabNavigator>
+    )
   }
   renderLoadingView() {
     return(
@@ -110,7 +135,27 @@ const styles = StyleSheet.create({
   list: {
     paddingTop: 20,
     backgroundColor: "#F5FCFF"
-  }
+  },
+  icon: {
+    height: 22,
+    width: 22
+  },
+  page1: {
+    flex: 1,
+    backgroundColor: 'red'
+  },
+  page2: {
+    flex: 1,
+    backgroundColor: 'blue'
+  },
+  page3: {
+    flex: 1,
+    backgroundColor: 'yellow'
+  },
+  page4: {
+    flex: 1,
+    backgroundColor: 'green'
+  },
 });
 
 AppRegistry.registerComponent('SampleAppMovies', () => SampleAppMovies);
