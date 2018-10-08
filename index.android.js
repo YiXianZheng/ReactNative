@@ -34,6 +34,7 @@ export default class SampleAppMovies extends Component {
     };
     this.fetchData = this.fetchData.bind(this);
   }
+  
   componentDidMount() {
     this.fetchData();
   }
